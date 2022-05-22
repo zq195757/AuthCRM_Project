@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqweb.rbac.mapper.EmployeeMapper">
+    <!--实体类别名机制-->
+    <resultMap id="BaseResultMap" type="EmployeeEntity" >
+        <result property="id" column="id" javaType="Long" />
+        <result property="name" column="name" javaType="String"/>
+        <result property="email" column="email"  />
+        <result property="age" column="age"  />
+        <result property="admin" column="admin"  />
+        <!--实体类型映射定制 d_前缀作字段同名映射区分-->
+        <association property="department" javaType="DepartmentEntity" columnPrefix="d_">
+            <result property="id" column="id" />
+            <result property="name" column="name" />
+        </association>
+        <!--集合类型映射定制 将id字段值传给select的sql语句，将查询结果封装到EmployeeEntity类的roles属性 ofType：集合中每个元素的类型-->
+        <collection property="roles" column="id" ofType="role"
+            select="com.zqweb.rbac.mapper.RoleMapper.selectByEmpId" />
+
+    </resultMap>
+
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM employee e left join department d ON e.dept_id = d.id
+        <where>
+            <if test="keyword!=null">
+                and e.name like concat('%',#{keyword},'%') or e.email like concat('%',#{keyword},'%')
+            </if>
+            <if test="deptId!=-1">
+                and d.id = #{deptId}
+            </if>
+        </where>
+    </select>
+
+    <select id="listPage" resultMap="BaseResultMap" parameterType="com.zqweb.rbac.pojo.query.EmployeeQueryObject">
+        SELECT e.id, e.name, e.password, e.email, e.age, e.admin, e.dept_id, d.id as d_id, d.name as d_name
+        FROM employee e left join department d ON e.dept_id = d.id
+        <!-- 使用Mybatis提供的<where>可解决连接符混乱问题，同时解决了头部添加 1 = 1恒等式的不够优雅问题 -->
+        <where>
+            <if test="keyword!=null">
+                and e.name like concat('%',#{keyword},'%') or e.email like concat('%',#{keyword},'%')
+            </if>
+            <if test="deptId!=-1">
+                and d.id = #{deptId}
+            </if>
+        </where>
+        order by e.id desc
+        <!-- 使用Mybatis分页组件时自定义分页sql容易出问题，末尾会多加1个自带的limit，导致sql语法错误 -->
+        limit #{start},#{pageSize};
+    </select>
+
+    <select id="listAll" resultMap="BaseResultMap" parameterType="com.zqweb.rbac.pojo.query.EmployeeQueryObject">
+        SELECT e.id, e.name, e.password, e.email, e.age, e.admin, e.dept_id, d.id as d_id, d.name as d_name
+        FROM employee e left join department d ON e.dept_id = d.id order by e.id desc;
+    </select>
+
+    <select id="getMergedEmployeeInfoById" resultMap="BaseResultMap">
+        select e.id, e.name, e.password, e.email, e.age, e.admin, e.dept_id, d.id as d_id, d.name as d_name
+        FROM employee e left join department d ON e.dept_id = d.id
+        where e.id = #{id};
+    </select>
+
+
+
+
+</mapper>

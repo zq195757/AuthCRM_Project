@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqweb.rbac.mapper.EmployeeRoleMapper">
+    <delete id="deleteOldRelations">
+        delete from employee_role where employee_id = #{employeeId};
+    </delete>
+
+    <insert id="insertByBatchIds">
+        insert into employee_role values
+        <foreach collection="ids"  item="roleId" close=";" separator=",">
+            (#{empId},#{roleId})
+        </foreach>
+    </insert>
+
+</mapper>

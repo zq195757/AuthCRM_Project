@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqweb.rbac.mapper.DepartmentMapper">
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(1) from department;
+    </select>
+    <select id="listByPage" parameterType="com.zqweb.rbac.pojo.query.QueryEntity" resultType="com.zqweb.rbac.pojo.DepartmentEntity">
+        <!-- 这里的start，会先去寻找start属性，找不到就去调用getStart() -->
+        select * from department order by id desc limit #{start},#{pageSize};
+    </select>
+
+
+</mapper>

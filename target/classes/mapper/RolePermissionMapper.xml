@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqweb.rbac.mapper.RolePermissionMapper">
+
+    <select id="getPermissionsByRoleId" resultType="PermissionEntity">
+        select p.id,p.name,p.expression from permission p
+        join role_permission as rp on p.id = rp.permission_id
+        where rp.role_id = #{roleId};
+    </select>
+
+    <delete id="deleteRelationPermissions">
+        delete from role_permission where role_id = #{roleId};
+    </delete>
+
+    <insert id="insertNewRelations">
+        insert into role_permission values
+        <foreach collection="ids" close=";" separator="," item="p_id">
+            (#{roleId},#{p_id})
+        </foreach>
+    </insert>
+
+</mapper>

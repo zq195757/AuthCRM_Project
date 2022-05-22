@@ -24,7 +24,7 @@ mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.zqweb.rbac.pojo
 
-# 日志配置
+# 日志配置，显示debug及以上级别的输出日志
 logging:
   level:
     com:

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqweb.rbac.mapper.PermissionMapper">
+
+    <select id="getPermissionsByEmpId" resultType="java.lang.String">
+        <!-- 注意去重 -->
+        select distinct p.expression from permission p
+        left join role_permission rp on p.id = rp.permission_id
+        left join employee_role er on er.role_id = rp.role_id
+        where er.employee_id = #{empId};
+    </select>
+
+</mapper>

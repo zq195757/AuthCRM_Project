@@ -1,0 +1,36 @@
+server:
+  port: 7777
+
+spring:
+  # 运行环境
+  profiles:
+    active: dev
+  # Druid数据源
+  datasource:
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql:///practical_train?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      username: root
+      password: 195757
+      db-type: com.alibaba.druid.pool.DruidDataSource
+
+# 定义模板引擎的渲染后缀
+# 静态资源文件的默认加载文件夹是static，网页图标、第三方类库文件、媒体类文件等都放在其中
+  freemarker:
+    suffix: .ftl
+
+# 定义MybatisPlus的mapper扫描包路径及查询结果封装实体类对应的别名
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.zqweb.rbac.pojo
+
+# 日志配置
+logging:
+  level:
+    com:
+      zqweb:
+        rbac:
+          mapper: debug
+
+
+

@@ -4,7 +4,7 @@ server:
 spring:
   # 运行环境
   profiles:
-    active: dev
+    active: production
   # Druid数据源
   datasource:
     druid:
